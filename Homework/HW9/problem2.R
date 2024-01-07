@@ -1,5 +1,5 @@
 # Load the data
-setwd("/Users/valentino/Documents/Studium/Statistik/R/HW9")
+setwd("/Users/valentino/Documents/Studium/Semester 3/StatisticsAndProbabilityTheorie/Homework/HW9")
 load("waitingtimes2.Rdata")
 str(wt)
 
