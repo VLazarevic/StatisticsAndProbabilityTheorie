@@ -1,28 +1,18 @@
-# Given data
-observed_frequencies <- c(3, 11, 16, 14, 8, 3)
-n_trials <- 55
-expected_probabilities <- dbinom(-2:3, size = 8, prob = 0.5)
-expected_frequencies <- round(expected_probabilities * n_trials)
+# Observed frequencies
+observed <- c(3, 11, 16, 14, 8, 3)
 
-# Compute chi-square statistic
-chi_squared_statistic <- sum((observed_frequencies - expected_frequencies)^2 / expected_frequencies)
+# Expected probabilities for a binomial distribution B(8, 0.5)
+probabilities <- dbinom(0:5, size = 8, prob = 0.5)
 
-# Degrees of freedom (df)
-df <- length(observed_frequencies) - 1
+# Expected frequencies
+expected <- probabilities * sum(observed)
+p = probabilities
 
-# P-value
-p_value <- 1 - pchisq(chi_squared_statistic, df)
+# Chi-squared test
+chi_square_result <- chisq.test(observed, p)
 
-# Significance level
-alpha <- 0.01
+# Display the expected frequencies and chi-squared test result
+cat("Expected frequencies:\n", expected, "\n\n")
+cat("Chi-squared test result:\n")
+print(chi_square_result)
 
-# Decision
-cat("Chi-squared Statistic:", chi_squared_statistic, "\n")
-cat("Degrees of Freedom:", df, "\n")
-cat("P-value:", p_value, "\n")
-
-if (p_value < alpha) {
-  cat("Reject the null hypothesis (H0). The data is likely not from a binomial distribution B(8, 0.5).\n")
-} else {
-  cat("Fail to reject the null hypothesis (H0). There is not enough evidence to suggest a deviation from a binomial distribution B(8, 0.5).\n")
-}

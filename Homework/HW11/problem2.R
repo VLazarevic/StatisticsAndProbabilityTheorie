@@ -15,7 +15,7 @@ cat("Sample size (n):", n, "\n")
 cat("Number of sides (d):", d, "\n")
 
 # b)
-expected_frequencies <- rep(1/d, d) * n
+expected_frequencies <- rep(n/d, d)
 expected_frequencies
 
 # c)
@@ -28,6 +28,12 @@ degrees_of_freedom <- d - 1
 # e)
 critical_value <- qchisq(0.95, df = degrees_of_freedom)  # Assuming a 5% significance level
 p_value <- 1 - pchisq(chi_squared_statistic, df = degrees_of_freedom)
+
+if (chi_squared_statistic > critical_value) {
+  cat("Reject the null hypothesis. The die is likely not fair.\n")
+} else {
+  cat("Fail to reject the null hypothesis. The die may be fair.\n")
+}
 
 cat("Critical Value:", critical_value, "\n")
 cat("P-value:", p_value, "\n")
