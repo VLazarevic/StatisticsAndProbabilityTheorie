@@ -1,36 +1,61 @@
 setwd("/Users/valentino/Documents/Studium/Semester 3/StatisticsAndProbabilityTheorie/Homework/HW12")
-load(Evaluation.Rdata)
-# print(Evaluation.Rdata)
+load("Evaluation.Rdata")
 
-# a plot the points of exam against test points
-x = Evaluation$Uebungspunkte
-y = Evaluation$Klausurergebnis
-plot(x, y)
+#a)
+exercise_points <- Evaluation$Uebungspunkte
+exam_result <- Evaluation$Klausurergebnis
 
-# b compute the intercept b0 and b1 (without lm) and plot the regression line
-# comment on the meaning of the slope
-# b1 = s_y/s_x
-# b0 = y_mean - b1 * x_mean
-s_x = sd(x)
-s_y = sd(y)
-b1 = s_y/s_x
-b0 = mean(y) - b1* mean(x)
-print(b0)
-print(b1)
-abline(b0, b1, col='red')
+# Plot the data
+plot(exercise_points, exam_result, main="Exam Result vs. Exercise Points",
+     xlab="Exercise Points", ylab="Exam Result (%)")
 
-# c now perform the analysis using the command lm, fit the data to the model by using lm
-# plot the data points and regression line and discuss the plausibility of the model assumptions.
-lm_model = lm(y~x)
-intercept <- coef(lm_model)[1]
-slope <- coef(lm_model)[2]
-print(intercept)
-print(slope)
-abline(intercept, slope, col='blue')
+# There seems to exist a relation between the exercise_points and the exam results. However, as the points are quite scattered and
+# not even close to a straight line, one could assume that the error is quite large.
 
-# Which result would you predict for a student with 140 points in the excercise
-# mark that prediction in the plot
-# result depends on which model is used
-abline(v=140, col='blue')
-print(intercept + slope * 140)
-# 75.46639
+#b)
+# Compute mean and standard deviation of x and y
+mean_x <- mean(exercise_points)
+standard_deviation_of_points <- sd(exercise_points)
+mean_y <- mean(exam_result)
+standard_deviation_of_result <- sd(exam_result)
+
+
+e_correlation <- cor(exercise_points, exam_result)
+
+b1 <- e_correlation * (standard_deviation_of_points / standard_deviation_of_result) # formula from the slides
+b0 <- mean_y - b1 * mean_x # formula from the slides
+
+abline(b0, b1, col = "red") # plot the regression line
+
+# Print the results
+cat("Intercept (b0):", b0, "\n")
+cat("Slope (b1):", b1, "\n")
+
+#b) The positive value of the slope indicates a positive linear relationship
+# between the two variables.
+
+#c)
+# Fit the data to the model using lm()
+model <- lm(exam_result ~ exercise_points)
+model
+
+abline(model, col = "green")
+# The green line is fitted using the lm() function, which performs a linear
+# regression analysis
+# to find the best-fitting line based on the method of least squares.
+
+# Interpretation: The coefficients (b0 and b1) of the red line are based on direct
+# calculations, while the coefficients of the green line are obtained through a
+# statistical modeling process, providing more robust estimates.
+
+# Extracting Coefficients:
+b0 <- lm(exam_result~exercise_points)$coefficients[1]
+b1 <- lm(exam_result~exercise_points)$coefficients[2]
+
+# Making a Prediction: prediction is made for a student with 140 points in exercises.
+prediction <- b0 + b1 * 140
+prediction
+
+points(140, prediction, pch = 16)
+
+text(140, prediction, labels = paste("Prediction:", round(prediction, 2)), pos = 4, col = "green")

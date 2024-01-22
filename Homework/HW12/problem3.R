@@ -6,10 +6,7 @@ x_mean = 3
 x_sd = 1
 
 y_mean = 2
-y_sd = sqrt(4) # sd is 2
-
-z_mean = 0
-z_sd = 1
+y_sd = 2
 
 mean_vector = c(x_mean, y_mean)
 sd_vector = c(x_sd, y_sd)
@@ -19,8 +16,10 @@ for (current_p in p) {
   cov_matrix <- matrix(c(sd_vector[1]^2, correlation * sd_vector[1] * sd_vector[2],
                          correlation * sd_vector[1] * sd_vector[2], sd_vector[2]^2), 
                        nrow = 2, ncol = 2, byrow = TRUE)
+  print(cov_matrix)
   random_samples <- mvrnorm(n = n, mu = mean_vector, Sigma = cov_matrix)
   r = cor(random_samples[,1], random_samples[,2])
+  print(r)
   plot(random_samples[,1], random_samples[,2], main='Correlation', sub = as.character(r), xlab='X values', ylab='Y values')
   b1 = y_sd * current_p / x_sd
   b0 = y_mean - b1*x_mean
